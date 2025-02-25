@@ -1,0 +1,24 @@
+﻿@model IEnumerable<vinnycatforum.Models.Discussion>
+
+<h1>Discussion Threads</h1>
+
+@foreach (var discussion in Model)
+{
+    <div class="discussion-item">
+        <h2>
+            <a asp-controller="Discussions" asp-action="Details" asp-route-id="@discussion.DiscussionId">
+                @discussion.Title
+            </a>
+
+        </h2>
+
+        @if (!string.IsNullOrEmpty(discussion.ImageFilename))
+        {
+            <img src="~/images/@discussion.ImageFilename" alt="Thumbnail" style="max-width:200px; height:auto;" />
+        }
+
+        <p>Comments: @discussion.Comments?.Count() ?? 0</p>
+        <p>Created on: @discussion.CreateDate.ToString("yyyy-MM-dd HH:mm")</p>
+    </div>
+    <hr />
+}
