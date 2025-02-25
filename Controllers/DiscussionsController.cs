@@ -24,7 +24,7 @@ namespace vinnycatforum.Controllers
         {
             var discussions = await _context.Discussion.ToListAsync();
 
-            // 拼接图片路径
+            
             foreach (var discussion in discussions)
             {
                 discussion.ImageFilename = Path.Combine("/images", discussion.ImageFilename);
@@ -48,7 +48,7 @@ namespace vinnycatforum.Controllers
             {
                 return NotFound();
             }
-            // 拼接图片路径
+            
             discussion.ImageFilename = Path.Combine("/images", discussion.ImageFilename);
             return View(discussion);
         }
@@ -68,19 +68,19 @@ namespace vinnycatforum.Controllers
         {
             
 
-                // 自动生成 CreateDate
+                // CreateDate
                 discussion.CreateDate = DateTime.Now;
 
-            // 检查并保存图片
+            
             if (discussion.ImageFile != null)
             {
-                // 使用 GUID 重命名图片文件，确保唯一性
+                
                 discussion.ImageFilename = Guid.NewGuid().ToString() + Path.GetExtension(discussion.ImageFile.FileName);
 
-                // 定义保存图片的路径
+                
                 string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", discussion.ImageFilename);
 
-                // 保存图片到 wwwroot/images 目录
+                
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     await discussion.ImageFile.CopyToAsync(stream);
@@ -132,7 +132,7 @@ namespace vinnycatforum.Controllers
             {
                 try
                 {
-                    // 保留原有的 CreateDate 和 ImageFilename，不允许用户修改
+                    
                     var existingDiscussion = await _context.Discussion.AsNoTracking().FirstOrDefaultAsync(m => m.DiscussionId == id);
 
                     if (existingDiscussion != null)
