@@ -22,9 +22,7 @@
                 @Html.DisplayNameFor(model => model.Discussion)
             </th>
 
-            <th>
-                @Html.DisplayNameFor(model => model.ImageFilename)
-            </th>
+            
 
             <th></th>
         </tr>
@@ -42,16 +40,12 @@
                 @Html.DisplayFor(modelItem => item.Discussion.Content)
             </td>
             <td>
-                <td>
-                        @if (!string.IsNullOrEmpty(item.ImageFilename))
-                        {
-                        <img src="~/images/@item.ImageFilename" alt="Image" style="width:100px;height:auto;" />
-                        }
-                </td>
+               
 
 
                 <a asp-action="Edit" asp-route-id="@item.CommentId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.CommentId">Details</a> |
+                <a asp-action="GetDiscussion" asp-controller="Home" asp-route-id="@item.DiscussionId">Details</a>
+
                 <a asp-action="Delete" asp-route-id="@item.CommentId">Delete</a>
             </td>
         </tr>

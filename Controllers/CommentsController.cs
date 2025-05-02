@@ -25,10 +25,7 @@ namespace vinnycatforum.Controllers
             var comments = await _context.Comment.ToListAsync();
 
             
-            foreach (var comment in comments)
-            {
-                comment.ImageFilename = Path.Combine("/images", comment.ImageFilename);
-            }
+            
 
             return View(comments);
         }
@@ -51,52 +48,33 @@ namespace vinnycatforum.Controllers
             }
 
             
-            comment.ImageFilename = Path.Combine("/images", comment.ImageFilename);
+            
             return View(comment);
         }
 
-        // GET: Comments/Create
-        public IActionResult Create()
-        {
-            ViewData["DiscussionId"] = new SelectList(_context.Set<Discussion>(), "DiscussionId", "Content");
-            return View();
-        }
+       
 
         // POST: Comments/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CommentId,Content,DiscussionId,ImageFile")] Comment comment)
+        public async Task<IActionResult> Create([Bind("Content,DiscussionId")] Comment comment)
         {
             if (ModelState.IsValid)
             {
-                // CreateDate
-                comment.CreateDate = DateTime.Now;
-
                 
-                if (comment.ImageFile != null)
-                {
-                    
-                    comment.ImageFilename = Guid.NewGuid().ToString() + Path.GetExtension(comment.ImageFile.FileName);
-
-                    
-                    string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", comment.ImageFilename);
-
-                    
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await comment.ImageFile.CopyToAsync(stream);
-                    }
-                }
+                comment.CreateDate = DateTime.Now;
 
                 _context.Add(comment);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                
+                return RedirectToAction("GetDiscussion", "Home", new { id = comment.DiscussionId });
             }
-            ViewData["DiscussionId"] = new SelectList(_context.Set<Discussion>(), "DiscussionId", "Content", comment.DiscussionId);
-            return View(comment);
+
+            return RedirectToAction("GetDiscussion", "Home", new { id = comment.DiscussionId });
         }
+
+
 
         // GET: Comments/Edit/5
         public async Task<IActionResult> Edit(int? id)

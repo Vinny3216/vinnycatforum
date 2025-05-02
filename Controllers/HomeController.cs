@@ -43,10 +43,25 @@ public class HomeController : Controller
             return NotFound();
         }
 
-        return RedirectToAction("Details", "Comments", new { id = id });
+        return RedirectToAction("GetDiscussion", "Home", new { id = id });
+
 
     }
 
+
+    public async Task<IActionResult> GetDiscussion(int id)
+    {
+        var discussion = await _context.Discussion
+            .Include(d => d.Comments)
+            .FirstOrDefaultAsync(d => d.DiscussionId == id);
+
+        if (discussion == null)
+        {
+            return NotFound();
+        }
+
+        return View("DiscussionDetail", discussion);
+    }
 
 
     public IActionResult Privacy()

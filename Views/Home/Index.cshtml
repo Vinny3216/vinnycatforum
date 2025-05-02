@@ -6,7 +6,8 @@
 {
     <div class="discussion-item">
         <h2>
-            <a asp-controller="Discussions" asp-action="Details" asp-route-id="@discussion.DiscussionId">
+            <a asp-controller="Home" asp-action="GetDiscussion" asp-route-id="@discussion.DiscussionId">
+
                 @discussion.Title
             </a>
 
@@ -17,7 +18,8 @@
             <img src="~/images/@discussion.ImageFilename" alt="Thumbnail" style="max-width:200px; height:auto;" />
         }
 
-        <p>Comments: @discussion.Comments?.Count() ?? 0</p>
+        <p>Comments: @(discussion.Comments?.Count() ?? 0)</p>
+
         <p>Created on: @discussion.CreateDate.ToString("yyyy-MM-dd HH:mm")</p>
     </div>
     <hr />

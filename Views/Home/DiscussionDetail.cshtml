@@ -1,0 +1,45 @@
+@model vinnycatforum.Models.Discussion
+
+@{
+    ViewData["Title"] = "Discussion Detail";
+}
+
+<h1>@Model.Title</h1>
+<p>@Model.Content</p>
+
+@if (!string.IsNullOrEmpty(Model.ImageFilename))
+{
+    <img src="~/images/@Model.ImageFilename" alt="Image" style="max-width:600px;" />
+}
+
+<p><strong>Created:</strong> @Model.CreateDate.ToString("g")</p>
+
+<hr />
+<h3>Comments</h3>
+
+@if (Model.Comments != null && Model.Comments.Any())
+{
+    <ul>
+        @foreach (var comment in Model.Comments)
+        {
+            <li><strong>@comment.CreateDate.ToString("g")</strong>: @comment.Content</li>
+        }
+    </ul>
+}
+else
+{
+    <p>No comments yet.</p>
+}
+
+<hr />
+<h3>Add a Comment</h3>
+<form action="/Comments/Create" method="post">
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" name="DiscussionId" value="@Model.DiscussionId" />
+    <div class="form-group">
+        <label for="Content">Content:</label>
+        <textarea name="Content" class="form-control" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary mt-2">Submit</button>
+</form>
